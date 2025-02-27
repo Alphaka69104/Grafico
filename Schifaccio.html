@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Grafico Parabola o Retta</title>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {packages: ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            const type = document.getElementById('type').value;
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const c = parseFloat(document.getElementById('c').value);
+
+            const data = new google.visualization.DataTable();
+            data.addColumn('number', 'X');
+            data.addColumn('number', 'Y');
+
+            for (let x = -10; x <= 10; x += 0.1) {
+                let y;
+                if (type === 'parabola') {
+                    y = a * x * x + b * x + c;
+                } else {
+                    y = a * x + b;
+                }
+                data.addRow([x, y]);
+            }
+
+            const options = {
+                title: type === 'parabola' ? 'Parabola' : 'Retta',
+                curveType: 'function',
+                legend: { position: 'bottom' }
+            };
+
+            const chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+<body>
+    <h1>Grafico Leoncini</h1>
+
+    <form id="chartForm">
+        <label for="type">Seleziona il tipo di grafico:</label>
+        <select id="type" name="type">
+            <option value="parabola">Parabola</option>
+            <option value="retta">Retta</option>
+        </select>
+
+        <br><br>
+        <label for="a">Coefficiente a:</label>
+        <input type="number" id="a" name="a" step="any" required>
+
+        <br><br>
+        <label for="b">Coefficiente b:</label>
+        <input type="number" id="b" name="b" step="any" required>
+
+        <br><br>
+        <label for="c">Coefficiente c:</label>
+        <input type="number" id="c" name="c" step="any">
+        
+        <br><br>
+        <button type="button" onclick="drawChart()">Disegna Grafico</button>
+    </form>
+    <br>
+    <div id="curve_chart" style="width: 900px; height: 700px"></div>
+</body>
+</html>
